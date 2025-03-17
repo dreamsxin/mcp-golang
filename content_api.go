@@ -43,6 +43,15 @@ type ImageContent struct {
 	MimeType string `json:"mimeType" yaml:"mimeType" mapstructure:"mimeType"`
 }
 
+type HTMLContent struct {
+	HTML string `json:"html"` // Raw HTML content
+}
+
+type LinkContent struct {
+	URL  string `json:"url"`            // Destination address
+	Text string `json:"text,omitempty"` // Optional display text
+}
+
 type embeddedResourceType string
 
 const (
@@ -101,6 +110,8 @@ const (
 	// The value is the value of the "type" field in the Content so do not change
 	ContentTypeText             ContentType = "text"
 	ContentTypeImage            ContentType = "image"
+	ContentTypeHTML             ContentType = "html"
+	ContentTypeLink             ContentType = "link"
 	ContentTypeEmbeddedResource ContentType = "resource"
 )
 
@@ -108,6 +119,8 @@ type Content struct {
 	Type             ContentType
 	TextContent      *TextContent
 	ImageContent     *ImageContent
+	HTMLContent      *HTMLContent
+	LinkContent      *LinkContent
 	EmbeddedResource *EmbeddedResource
 	Annotations      *Annotations
 }
@@ -227,6 +240,30 @@ func NewTextContent(content string) *Content {
 	return &Content{
 		Type:        ContentTypeText,
 		TextContent: &TextContent{Text: content},
+	}
+}
+
+// NewHTMLContent creates a new Content instance containing HTML data.
+// The client should render this securely following HTML sanitization policies.
+func NewHTMLContent(html string) *Content {
+	return &Content{
+		Type:        ContentTypeHTML,
+		HTMLContent: &HTMLContent{HTML: html},
+	}
+}
+
+// NewLinkContent creates a new Content instance representing a hyperlink.
+// When text is empty, the client should display the URL as default.
+func NewLinkContent(url, text string) *Content {
+	if text == "" {
+		text = url
+	}
+	return &Content{
+		Type: ContentTypeLink,
+		LinkContent: &LinkContent{
+			URL:  url,
+			Text: text,
+		},
 	}
 }
 
