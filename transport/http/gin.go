@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/dreamsxin/mcp-golang/transport"
 	"github.com/gin-gonic/gin"
-	"github.com/metoro-io/mcp-golang/transport"
 )
 
 // GinTransport implements a stateless HTTP transport for MCP using Gin

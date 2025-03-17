@@ -9,10 +9,10 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/dreamsxin/mcp-golang/internal/datastructures"
+	"github.com/dreamsxin/mcp-golang/internal/protocol"
+	"github.com/dreamsxin/mcp-golang/transport"
 	"github.com/invopop/jsonschema"
-	"github.com/metoro-io/mcp-golang/internal/datastructures"
-	"github.com/metoro-io/mcp-golang/internal/protocol"
-	"github.com/metoro-io/mcp-golang/transport"
 	"github.com/pkg/errors"
 )
 

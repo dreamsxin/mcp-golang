@@ -1,26 +1,4 @@
-<div align="center">
-<img src="./resources/mcp-golang-logo.webp" height="300" alt="Statusphere logo">
-</div>
-<br/>
-<div align="center">
-
-![GitHub stars](https://img.shields.io/github/stars/metoro-io/mcp-golang?style=social)
-![GitHub forks](https://img.shields.io/github/forks/metoro-io/mcp-golang?style=social)
-![GitHub issues](https://img.shields.io/github/issues/metoro-io/mcp-golang)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/metoro-io/mcp-golang)
-![GitHub license](https://img.shields.io/github/license/metoro-io/mcp-golang)
-![GitHub contributors](https://img.shields.io/github/contributors/metoro-io/mcp-golang)
-![GitHub last commit](https://img.shields.io/github/last-commit/metoro-io/mcp-golang)
-[![GoDoc](https://pkg.go.dev/badge/github.com/metoro-io/mcp-golang.svg)](https://pkg.go.dev/github.com/metoro-io/mcp-golang)
-[![Go Report Card](https://goreportcard.com/badge/github.com/metoro-io/mcp-golang)](https://goreportcard.com/report/github.com/metoro-io/mcp-golang)
-![Tests](https://github.com/metoro-io/mcp-golang/actions/workflows/go-test.yml/badge.svg)
-
-
-
-
-</div>
-
-# mcp-golang 
+# mcp-golang
 
 mcp-golang is an unofficial implementation of the [Model Context Protocol](https://modelcontextprotocol.io/) in Go.
 
@@ -37,7 +15,7 @@ Docs at [https://mcpgolang.com](https://mcpgolang.com)
 
 ## Example Usage
 
-Install with `go get github.com/metoro-io/mcp-golang`
+Install with `go get github.com/dreamsxin/mcp-golang`
 
 ### Server Example
 
@@ -46,8 +24,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/metoro-io/mcp-golang"
-	"github.com/metoro-io/mcp-golang/transport/stdio"
+	"github.com/dreamsxin/mcp-golang"
+	"github.com/dreamsxin/mcp-golang/transport/stdio"
 )
 
 // Tool arguments are just structs, annotated with jsonschema tags
@@ -121,8 +99,8 @@ package main
 import (
     "context"
     "log"
-    mcp "github.com/metoro-io/mcp-golang"
-    "github.com/metoro-io/mcp-golang/transport/stdio"
+    mcp "github.com/dreamsxin/mcp-golang"
+    "github.com/dreamsxin/mcp-golang/transport/stdio"
 )
 
 // Define type-safe arguments
@@ -197,12 +175,6 @@ Contributions are more than welcome! Please check out [our contribution guidelin
 
 Got any suggestions, have a question on the api or usage? Ask on the [discord server](https://discord.gg/33saRwE3pT). 
 A maintainer will be happy to help you out.
-
-## Examples
-
-Some more extensive examples using the library found here:
-
-- <img height="12" width="12" src="https://metoro.io/static/images/logos/Metoro.svg" /> **[Metoro](https://github.com/metoro-io/metoro-mcp-server)** - Query and interact with kubernetes environments monitored by Metoro
 
 Open a PR to add your own projects!
 

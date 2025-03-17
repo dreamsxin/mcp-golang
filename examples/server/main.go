@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	mcp "github.com/metoro-io/mcp-golang"
-	"github.com/metoro-io/mcp-golang/transport/stdio"
+	mcp "github.com/dreamsxin/mcp-golang"
+	"github.com/dreamsxin/mcp-golang/transport/stdio"
 )
 
 // HelloArgs represents the arguments for the hello tool
