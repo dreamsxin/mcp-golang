@@ -3,6 +3,7 @@ package mcp_golang
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/tidwall/sjson"
 )
@@ -33,6 +34,14 @@ type TextContent struct {
 	Text string `json:"text" yaml:"text" mapstructure:"text"`
 }
 
+type JsonContent struct {
+	Json string `json:"json" yaml:"json" mapstructure:"json"`
+}
+
+type HTMLContent struct {
+	HTML string `json:"html" yaml:"html" mapstructure:"html"` // Raw HTML content
+}
+
 // An image provided to or from an LLM.
 type ImageContent struct {
 	// The base64-encoded image data.
@@ -41,10 +50,6 @@ type ImageContent struct {
 	// The MIME type of the image. Different providers may support different image
 	// types.
 	MimeType string `json:"mimeType" yaml:"mimeType" mapstructure:"mimeType"`
-}
-
-type HTMLContent struct {
-	HTML string `json:"html"` // Raw HTML content
 }
 
 type LinkContent struct {
@@ -109,8 +114,9 @@ type ContentType string
 const (
 	// The value is the value of the "type" field in the Content so do not change
 	ContentTypeText             ContentType = "text"
-	ContentTypeImage            ContentType = "image"
+	ContentTypeJson             ContentType = "json"
 	ContentTypeHTML             ContentType = "html"
+	ContentTypeImage            ContentType = "image"
 	ContentTypeLink             ContentType = "link"
 	ContentTypeEmbeddedResource ContentType = "resource"
 )
@@ -118,8 +124,9 @@ const (
 type Content struct {
 	Type             ContentType
 	TextContent      *TextContent
-	ImageContent     *ImageContent
+	JsonContent      *JsonContent
 	HTMLContent      *HTMLContent
+	ImageContent     *ImageContent
 	LinkContent      *LinkContent
 	EmbeddedResource *EmbeddedResource
 	Annotations      *Annotations
@@ -129,10 +136,14 @@ func (c *Content) UnmarshalJSON(b []byte) error {
 	type typeWrapper struct {
 		Type             ContentType       `json:"type" yaml:"type" mapstructure:"type"`
 		Text             *string           `json:"text" yaml:"text" mapstructure:"text"`
-		Image            *string           `json:"image" yaml:"image" mapstructure:"image"`
+		Json             *string           `json:"json" yaml:"json" mapstructure:"json"`
+		HTML             *string           `json:"html" yaml:"html" mapstructure:"html"`
+		Data             *string           `json:"data" yaml:"data" mapstructure:"data"`
+		URL              *string           `json:"url" yaml:"url" mapstructure:"url"`
 		Annotations      *Annotations      `json:"annotations" yaml:"annotations" mapstructure:"annotations"`
 		EmbeddedResource *EmbeddedResource `json:"resource" yaml:"resource" mapstructure:"resource"`
 	}
+	log.Println(string(b))
 	var tw typeWrapper
 	err := json.Unmarshal(b, &tw)
 	if err != nil {
@@ -141,8 +152,14 @@ func (c *Content) UnmarshalJSON(b []byte) error {
 	switch tw.Type {
 	case ContentTypeText:
 		c.Type = ContentTypeText
+	case ContentTypeJson:
+		c.Type = ContentTypeJson
+	case ContentTypeHTML:
+		c.Type = ContentTypeHTML
 	case ContentTypeImage:
 		c.Type = ContentTypeImage
+	case ContentTypeLink:
+		c.Type = ContentTypeLink
 	case ContentTypeEmbeddedResource:
 		c.Type = ContentTypeEmbeddedResource
 	default:
@@ -152,6 +169,14 @@ func (c *Content) UnmarshalJSON(b []byte) error {
 	switch c.Type {
 	case ContentTypeText:
 		c.TextContent = &TextContent{Text: *tw.Text}
+	case ContentTypeJson:
+		c.JsonContent = &JsonContent{Json: *tw.Json}
+	case ContentTypeHTML:
+		c.HTMLContent = &HTMLContent{HTML: *tw.HTML}
+	case ContentTypeImage:
+		c.ImageContent = &ImageContent{Data: *tw.Data}
+	case ContentTypeLink:
+		c.LinkContent = &LinkContent{URL: *tw.URL, Text: *tw.Text}
 	default:
 		return fmt.Errorf("unknown content type: %s", c.Type)
 	}
@@ -170,8 +195,26 @@ func (c Content) MarshalJSON() ([]byte, error) {
 			return nil, err
 		}
 		rawJson = j
+	case ContentTypeJson:
+		j, err := json.Marshal(c.JsonContent)
+		if err != nil {
+			return nil, err
+		}
+		rawJson = j
+	case ContentTypeHTML:
+		j, err := json.Marshal(c.HTMLContent)
+		if err != nil {
+			return nil, err
+		}
+		rawJson = j
 	case ContentTypeImage:
 		j, err := json.Marshal(c.ImageContent)
+		if err != nil {
+			return nil, err
+		}
+		rawJson = j
+	case ContentTypeLink:
+		j, err := json.Marshal(c.LinkContent)
 		if err != nil {
 			return nil, err
 		}
